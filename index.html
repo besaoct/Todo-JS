@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&display=swap" rel="stylesheet">
+
+    <title>To-Do App</title>
+    <style>
+        * {
+  font-family:'josefin sans';
+  max-width: 600px;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
+.editbtn,.ub{
+    background-color: #1d1f41;
+    color: #fff;
+    padding: 8px 8px;
+    border: none;
+    border-radius: 2px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    margin-bottom: 8px;;
+    margin-top: 12px;
+}
+.editbtn:hover,.ub:hover{
+    color: rgb(255, 255, 255);
+}
+.task-content{
+    padding: 8px;
+    outline: none;
+    border: 2px solid rgba(103, 83, 237, 0.502);
+    border-radius: 5px                                                                                                                                                                                                                                                  ;
+     
+}
+
+  .dark-mode {
+    background-color: rgb(26, 28, 53);
+    color: #fff;
+  }
+
+    </style>
+</head>
+
+<body class="bg-gray-100 h-screen font-sans">
+    <div class="container mx-auto m-5 p-6">
+        <h1 class="text-3xl font-medium text-center font-bold text-indigo-600 text-gray-800 mb-6">TO-DO</h1>
+        <button id="toggle-dark-mode" class="bg-indigo-500 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-2">Change Background</button>
+
+        <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            <div class="mb-4">
+                <label class="block text-gray-700 font-medium mb-2" for="task">
+                    Task
+                </label>
+                <input
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="task" type="text" placeholder="Enter a task">
+            </div>
+            <div class="flex items-center justify-between">
+                <button
+                    class="bg-indigo-500 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                    type="submit">
+                    Add Task
+                </button>
+            </div>
+        </form>
+        <ul class="list-reset">
+ 
+        </ul>
+    </div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script>
+    const form = document.querySelector('form');
+    const taskInput = document.getElementById('task');
+    const taskList = document.querySelector('ul');
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const task = taskInput.value;
+        
+     if (!task) {
+            Swal.fire({
+                title: 'Error',
+                text: 'Task field cannot be empty',
+                icon: 'error',
+                confirmButtonText: 'Ok'
+            });
+            return;
+        }
+        taskInput.value = '';
+
+        const taskItem = document.createElement('li');
+        taskItem.classList.add('bg-white', 'shadow-md', 'rounded', 'mb-4', 'p-4', 'task-item');
+
+        const taskContent = document.createElement('p');
+        taskContent.classList.add('text-gray-700', 'font-medium', 'task-content');
+        taskContent.contentEditable = "false";
+        taskContent.textContent = task;
+
+        const editButton = document.createElement('button');
+        editButton.classList.add('text-xs', 'font-medium', 'text-gray-600', 'hover:text-gray-800', 'mr-2','p-4', 'editbtn');
+        editButton.textContent = 'Edit';
+        editButton.addEventListener('click', (event) => {
+            taskContent.contentEditable = "true";
+            taskContent.focus();
+            editButton.style.display = "none";
+            updateButton.style.display = "inline-block";
+        });
+
+        const updateButton = document.createElement('button');
+        updateButton.classList.add('text-xs', 'font-medium', 'text-gray-600', 'hover:text-gray-800','ub');
+        updateButton.textContent = 'Update';
+        updateButton.style.display = "none";
+        updateButton.addEventListener('click', (event) => {
+            taskContent.contentEditable = "false";
+            updateButton.style.display = "none";
+            editButton.style.display = "inline-block";
+            updateTimestamp();
+        });
+
+        const timestamp = document.createElement('p');
+        timestamp.classList.add('text-xs', 'text-gray-500');
+        timestamp.textContent = `Added on ${new Date().toLocaleString()}`;
+
+        function updateTimestamp() {
+            timestamp.textContent = `Updated on ${new Date().toLocaleString()}`;
+        }
+
+        taskItem.appendChild(taskContent);
+        taskItem.appendChild(editButton);
+        taskItem.appendChild(updateButton);
+        taskItem.appendChild(timestamp);
+        taskList.appendChild(taskItem);
+    });
+
+    const toggleDarkModeButton = document.getElementById('toggle-dark-mode');
+    const body = document.body;
+
+    toggleDarkModeButton.addEventListener('click', () => {
+        body.classList.toggle('dark-mode');
+    });
+
+    </script>
+</body>
+
+</html>
